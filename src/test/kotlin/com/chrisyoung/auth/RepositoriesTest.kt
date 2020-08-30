@@ -1,5 +1,6 @@
 package com.chrisyoung.auth
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -16,5 +17,6 @@ class RepositoriesTest @Autowired constructor(
         entityManager.persist(oldMate)
         entityManager.flush()
         val user = userRepository.findByUsername("oldmate")
+        assertThat(user).isEqualTo(oldMate)
     }
 }

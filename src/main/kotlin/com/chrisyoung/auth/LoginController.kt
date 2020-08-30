@@ -6,15 +6,14 @@ import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 
-
 @Controller
-class LoginController {
+class LoginController(private val userRepository: UserRepository) {
     @GetMapping("/login")
     fun loginForm(model: Model): String {
         model["title"] = "Login"
+        model["error"] = ""
         return "login"
     }
     @PostMapping("/login", consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
@@ -24,9 +23,16 @@ class LoginController {
             @RequestParam(name = "password") password: String
     ): String {
         model["title"] = "Login"
+        model["error"] = ""
         model["username"] = username;
         model["password"] = password;
-        return "loggedin"
+        val user = userRepository.findByUsername(username)
+        if (user !== null && password == user.password) {
+            return "loggedin"
+        } else {
+            model["error"] = "user not found or password incorrect"
+        }
+        return "login"
     }
 }
 
