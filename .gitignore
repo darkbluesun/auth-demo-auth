@@ -3,6 +3,12 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+build/
+.gradle
+
+# Java
+*.jar
+out
 
 ### STS ###
 .apt_generated
