@@ -1,0 +1,9 @@
+{{> _header }}
+<form method="post" action="/authorize">
+    <input type="hidden" name="clientId" value="{{clientId}}"/>
+    <input type="hidden" name="state" value="{{state}}">
+    Authorise {{ clientName }}?
+    <br/>
+    <input type="submit" title="Authorise">
+</form>
+{{> _footer }}
