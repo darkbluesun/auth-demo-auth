@@ -3,6 +3,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	id("org.springframework.boot") version "2.3.3.RELEASE"
 	id("io.spring.dependency-management") version "1.0.10.RELEASE"
+	id("java")
+	id("jacoco")
+	id("com.github.kt3k.coveralls") version "2.10.2"
 	kotlin("jvm") version "1.3.72"
 	kotlin("plugin.spring") version "1.3.72"
 	kotlin("plugin.jpa") version "1.3.72"
@@ -27,6 +30,20 @@ dependencies {
 	runtimeOnly("com.h2database:h2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+	}
+}
+
+sourceSets {
+	main {
+		java.srcDirs("src/main/kotlin")
+	}
+}
+
+tasks {
+	jacocoTestReport {
+		reports {
+			xml.isEnabled = true
+		}
 	}
 }
 
