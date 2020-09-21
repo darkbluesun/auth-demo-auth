@@ -7,20 +7,20 @@ import javax.persistence.ManyToOne
 
 @Entity
 class User(
-        var username: String,
-        var password: String,
-        @Id @GeneratedValue var id: Long? = null)
+        val username: String,
+        val password: String,
+        @Id @GeneratedValue val id: Long? = null)
 
 @Entity
 class Client(
-        var name: String,
-        var secret: String,
-        var redirectUrl: String,
-        @Id @GeneratedValue var id: Long? = null)
+        val name: String,
+        val secret: String,
+        val redirectUrl: String,
+        @Id @GeneratedValue val id: Long? = null)
 
 @Entity
 class Code(
-        var code: String,
-        @ManyToOne var client: Client,
-        @ManyToOne var user: User,
-        @Id @GeneratedValue var id: Long? = null)
+        val code: String,
+        @ManyToOne val client: Client,
+        @ManyToOne val user: User,
+        @Id @GeneratedValue val id: Long? = null)
