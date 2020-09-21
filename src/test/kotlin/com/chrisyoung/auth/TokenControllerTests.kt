@@ -21,4 +21,12 @@ class TokenControllerTests(@Autowired val restTemplate: TestRestTemplate) {
         val entity = restTemplate.postForEntity<String>("/token", request)
         assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
     }
+    @Test
+    fun `Bad code`() {
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_JSON
+        val request = HttpEntity(TokenRequest("wrong"), headers)
+        val entity = restTemplate.postForEntity<String>("/token", request)
+        assertThat(entity.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
+    }
 }
