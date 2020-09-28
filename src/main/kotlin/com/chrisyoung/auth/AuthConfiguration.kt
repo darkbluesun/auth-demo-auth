@@ -13,7 +13,7 @@ class AuthConfiguration {
             codeRepository: CodeRepository
     ) = ApplicationRunner {
         val user = userRepository.save(User("testuser", "testpassword"))
-        val client = clientRepository.save(Client("Website", "secret", "https://localhost:3000/login"))
+        val client = clientRepository.save(Client("Website", "secret", "http://localhost:3000/login"))
         codeRepository.save(Code("1234", client, user))
     }
 }

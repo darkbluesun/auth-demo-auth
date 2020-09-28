@@ -2,6 +2,7 @@ package com.chrisyoung.auth
 
 import javassist.NotFoundException
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
@@ -16,6 +17,7 @@ data class TokenResponse(
         val user: User
 )
 
+@CrossOrigin(origins = ["http://localhost:3000"])
 @RestController
 class TokenController(val codeRepository: CodeRepository) {
     @PostMapping("/token")

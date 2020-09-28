@@ -1,6 +1,5 @@
 package com.chrisyoung.auth
 
-import javassist.NotFoundException
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
@@ -20,11 +19,13 @@ class AuthController(
     @GetMapping("/authorize")
     fun authorizeForm(
             model: Model,
+            request: HttpServletRequest,
             @RequestParam(name = "state") state: String,
             @RequestParam(name = "clientId") clientId: Long
     ): String {
         val client = clientRepository.findById(clientId).orElse(null)
         client ?: return ":notfound"
+        request.session.getAttribute("user") as User? ?: return "redirect:/login"
         model["title"] = "Authorize"
         model["clientId"] = clientId
         model["clientName"] = client.name
