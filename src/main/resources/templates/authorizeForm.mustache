@@ -1,9 +1,12 @@
 {{> _header }}
-<form method="post" action="/authorize">
-    <input type="hidden" name="clientId" value="{{clientId}}"/>
-    <input type="hidden" name="state" value="{{state}}">
-    Authorise {{ clientName }}?
-    <br/>
-    <input type="submit" title="Authorise">
-</form>
+<div class="jumbotron">
+    <form method="post" action="/authorize">
+        <input type="hidden" name="clientId" value="{{clientId}}"/>
+        <input type="hidden" name="state" value="{{state}}">
+        <h2>Authorise {{ clientName }}?</h2>
+        <br/>
+        <input class="btn btn-primary" type="submit" value="Authorise">
+        <button class="btn btn-danger" type="button" onclick="history.back()">Reject</button>
+    </form>
+</div>
 {{> _footer }}
