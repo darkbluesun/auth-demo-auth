@@ -1,6 +1,6 @@
 {{> _header }}
 Redirecting
 <script type="text/javascript">
-    window.location.href=decodeURI("{{ & redirectUrl}}")
+    window.location.href=encodeURI("{{ & redirectUrl}}")
 </script>
 {{> _footer }}

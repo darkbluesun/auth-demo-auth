@@ -16,6 +16,8 @@ class AuthController(
         private val clientRepository: ClientRepository,
         private val codeRepository: CodeRepository
 ) {
+    private val chars = ('0'..'z').toList().toTypedArray()
+
     @GetMapping("/authorize")
     fun authorizeForm(
             model: Model,
@@ -42,7 +44,8 @@ class AuthController(
         val client: Client? = clientRepository.findById(clientId).orElse(null)
         client ?: return "notfound:"
         val user = request.session.getAttribute("user") as User? ?: return "redirect:/login"
-        val code = codeRepository.save(Code(client.secret, client, user))
+        val secret = (1..32).map { chars.random() }.joinToString("")
+        val code = codeRepository.save(Code(secret, client, user))
 
         model["title"] = "Authorized"
         model["redirectUrl"] = format("%s?state=%s&code=%s", client.redirectUrl, state, code.code)
