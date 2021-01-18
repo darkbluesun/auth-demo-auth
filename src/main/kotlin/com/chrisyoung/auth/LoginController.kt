@@ -14,7 +14,8 @@ class LoginController(private val userRepository: UserRepository) {
     @GetMapping("/login")
     fun loginForm(model: Model, request: HttpServletRequest): String {
         model["title"] = "Login"
-        model["error"] = ""
+        model["error"] = "";
+        model["hasError"] = false;
         val session = request.session
         val user: User? = session.getAttribute("user") as User?
         if (user != null) {
@@ -33,6 +34,7 @@ class LoginController(private val userRepository: UserRepository) {
     ): String {
         model["title"] = "Login"
         model["error"] = ""
+        model["hasError"] = false
         model["username"] = username;
         model["password"] = password;
         val user = userRepository.findByUsername(username)
@@ -42,6 +44,7 @@ class LoginController(private val userRepository: UserRepository) {
             session.setAttribute("user", user)
             return "loggedin"
         } else {
+            model["hasError"] = true;
             model["error"] = "user not found or password incorrect"
         }
         return "login"
