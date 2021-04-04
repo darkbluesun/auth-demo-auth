@@ -3,8 +3,10 @@ package com.chrisyoung.auth
 import io.fusionauth.jwt.domain.JWT
 import io.fusionauth.jwt.hmac.HMACSigner
 import io.fusionauth.jwt.hmac.HMACVerifier
+import org.springframework.stereotype.Service
 import java.time.ZonedDateTime
 
+@Service
 class JwtService {
     private val secret = "secret"
     fun createAccessToken(client: Client, user: User): String {

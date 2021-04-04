@@ -19,11 +19,14 @@ data class TokenResponse(
 
 @CrossOrigin(origins = ["http://localhost:3000"])
 @RestController
-class TokenController(val codeRepository: CodeRepository) {
+class TokenController(
+    val codeRepository: CodeRepository,
+    val jwtService: JwtService
+    ) {
     @PostMapping("/token")
     fun createToken(@RequestBody(required = true) tokenRequest: TokenRequest): ResponseEntity<Any> {
         val code = codeRepository.findByCode(tokenRequest.code) ?: return  ResponseEntity.notFound().build()
-        val token = JwtService().createAccessToken(code.client, code.user)
+        val token = jwtService.createAccessToken(code.client, code.user)
         return ResponseEntity.ok().body(TokenResponse(token, "refresh-token", code.user))
     }
 }

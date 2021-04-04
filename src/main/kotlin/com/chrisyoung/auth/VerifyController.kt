@@ -8,12 +8,13 @@ import org.springframework.web.bind.annotation.RestController
 
 @CrossOrigin(origins = ["http://localhost:3000"])
 @RestController
-class VerifyController {
+class VerifyController
+    (val jwtService: JwtService){
     @GetMapping("/verify")
     fun verifiy(
             @RequestHeader(name = "Authorization") auth: String
     ): JWT? {
         val token = auth.replace("Bearer ", "")
-        return JwtService().verify(token)
+        return jwtService.verify(token)
     }
 }
