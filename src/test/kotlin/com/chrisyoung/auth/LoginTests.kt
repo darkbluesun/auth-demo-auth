@@ -24,14 +24,14 @@ class LoginTests(@Autowired val restTemplate: TestRestTemplate) {
 
     @Test
     fun `Assert user login fail`() {
-        val loginResponse = restTemplate.postForEntity<String>("/login?username=testuser&password=wrongpassword")
+        val loginResponse = restTemplate.postForEntity<String>("/login?email=test@test.com&password=wrongpassword")
         assertThat(loginResponse.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(loginResponse.body).contains("user not found")
     }
 
     @Test
     fun `Assert user login`() {
-        val loginResponse = restTemplate.postForEntity<String>("/login?username=testuser&password=testpassword")
+        val loginResponse = restTemplate.postForEntity<String>("/login?email=test@test.com&password=password")
         assertThat(loginResponse.statusCode).isEqualTo(HttpStatus.OK)
         val sessionCookie = loginResponse.headers.get("Set-Cookie")?.get(0)?.split(';')?.get(0);
         val headers = HttpHeaders();

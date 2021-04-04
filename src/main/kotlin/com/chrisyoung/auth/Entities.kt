@@ -7,7 +7,10 @@ import javax.persistence.ManyToOne
 
 @Entity
 class User(
-        val username: String,
+        val email: String,
+        val mobile: String,
+        val firstName: String,
+        val lastName: String,
         val password: String,
         @Id @GeneratedValue val id: Long? = null)
 

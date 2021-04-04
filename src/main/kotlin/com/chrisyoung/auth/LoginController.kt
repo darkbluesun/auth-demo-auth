@@ -19,7 +19,7 @@ class LoginController(private val userRepository: UserRepository) {
         val session = request.session
         val user: User? = session.getAttribute("user") as User?
         if (user != null) {
-            model["username"] = user.username
+            model["email"] = user.email
             model["password"] = user.password
             return "loggedin"
         }
@@ -29,18 +29,18 @@ class LoginController(private val userRepository: UserRepository) {
     fun login(
             model: Model,
             request: HttpServletRequest,
-            @RequestParam(name = "username") username: String,
+            @RequestParam(name = "email") email: String,
             @RequestParam(name = "password") password: String
     ): String {
         model["title"] = "Login"
         model["error"] = ""
         model["hasError"] = false
-        model["username"] = username;
+        model["email"] = email;
         model["password"] = password;
-        val user = userRepository.findByUsername(username)
+        val user = userRepository.findByEmail(email)
         if (user !== null && password == user.password) {
             val session = request.session
-            session.setAttribute("username", username)
+            session.setAttribute("email", email)
             session.setAttribute("user", user)
             return "loggedin"
         } else {

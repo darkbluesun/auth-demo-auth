@@ -37,7 +37,7 @@ class AuthControllerTests(@Autowired val restTemplate: TestRestTemplate) {
     }
     @Test
     fun `Assert that the redirect happens`() {
-        val loginResponse = restTemplate.postForEntity<String>("/login?username=testuser&password=testpassword")
+        val loginResponse = restTemplate.postForEntity<String>("/login?email=test@test.com&password=password")
         assertThat(loginResponse.statusCode).isEqualTo(HttpStatus.OK)
         val sessionCookie = loginResponse.headers.get("Set-Cookie")?.get(0)?.split(';')?.get(0);
         val headers = HttpHeaders();
