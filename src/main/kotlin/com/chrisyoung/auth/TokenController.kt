@@ -12,8 +12,8 @@ data class TokenRequest(
 )
 
 data class TokenResponse(
-        val accessToken: String,
-        val refreshToken: String,
+        val access_token: String,
+        val refresh_token: String,
         val user: User
 )
 
