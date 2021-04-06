@@ -1,7 +1,10 @@
 package com.chrisyoung.auth
 
+import org.springframework.http.HttpStatus
+import org.springframework.http.RequestEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.net.URI
 
 data class UserCreateBody(
     val email: String,
@@ -39,7 +42,7 @@ class UsersController(
     fun add(
         @RequestHeader(name = "authorization") auth: String,
         @RequestBody(required = true) requestBody: UserCreateBody
-    ): ResponseEntity<Any> {
+    ): ResponseEntity<User> {
         val token = auth.replace("Bearer ", "")
         jwtService.verify(token)
         val password = "password";
@@ -50,6 +53,6 @@ class UsersController(
             requestBody.lastName,
             password
         ))
-        return ResponseEntity.ok(user);
+        return ResponseEntity(user, HttpStatus.CREATED);
     }
 }
