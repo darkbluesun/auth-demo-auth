@@ -14,7 +14,8 @@ import javax.servlet.http.HttpServletRequest
 class AuthController(
         private val entityManager: EntityManager,
         private val clientRepository: ClientRepository,
-        private val codeRepository: CodeRepository
+        private val codeRepository: CodeRepository,
+        private val userRepository: UserRepository
 ) {
     private val chars = ('0'..'z').toList().toTypedArray()
 
@@ -27,7 +28,6 @@ class AuthController(
     ): String {
         val client = clientRepository.findById(clientId).orElse(null)
         client ?: return ":notfound"
-        request.session.getAttribute("user") as User? ?: return "redirect:/login"
         model["title"] = "Authorize"
         model["clientId"] = clientId
         model["clientName"] = client.name
@@ -43,7 +43,7 @@ class AuthController(
     ): String {
         val client: Client? = clientRepository.findById(clientId).orElse(null)
         client ?: return "notfound:"
-        val user = request.session.getAttribute("user") as User? ?: return "redirect:/login"
+        val user = userRepository.findByEmail(request.userPrincipal.name) ?: return "redirect:/login"
         val secret = (1..32).map { chars.random() }.joinToString("")
         val code = codeRepository.save(Code(secret, client, user))
 

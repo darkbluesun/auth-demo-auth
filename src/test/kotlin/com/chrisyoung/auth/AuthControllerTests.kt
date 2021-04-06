@@ -32,13 +32,13 @@ class AuthControllerTests(@Autowired val restTemplate: TestRestTemplate) {
     }
     @Test
     fun `Assert that wrong clientId fails POST`() {
-        val entity = restTemplate.postForEntity<String>("/authorize?state=1234&clientId=1")
+        val entity = restTemplate.postForEntity<String>("/authorize?state=1234&clientId=7")
         assertThat(entity.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
     }
     @Test
     fun `Assert that the redirect happens`() {
         val loginResponse = restTemplate.postForEntity<String>("/login?email=test@test.com&password=password")
-        assertThat(loginResponse.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(loginResponse.statusCode).isEqualTo(HttpStatus.FOUND)
         val sessionCookie = loginResponse.headers.get("Set-Cookie")?.get(0)?.split(';')?.get(0);
         val headers = HttpHeaders();
         headers.add("Cookie", sessionCookie)
