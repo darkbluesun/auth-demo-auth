@@ -15,36 +15,19 @@ data class UserCreateBody(
 
 @CrossOrigin(origins = ["http://localhost:3000"])
 @RestController
-class UsersController(
-    val userRepository: UserRepository,
-    val jwtService: JwtService
-    ) {
+class UsersController(val userRepository: UserRepository) {
     @GetMapping("/users")
-    fun index(
-        @RequestHeader(name = "authorization") auth: String
-    ): ResponseEntity<Any> {
-        val token = auth.replace("Bearer ", "")
-        jwtService.verify(token);
+    fun index(): ResponseEntity<Any> {
         val users = userRepository.findAll();
         return ResponseEntity.ok().body(users);
     }
     @GetMapping("/users/{id}")
-    fun getUser(
-        @PathVariable id: Long,
-        @RequestHeader(name = "authorization") auth: String
-    ): ResponseEntity<Any> {
-        val token = auth.replace("Bearer ", "")
-        jwtService.verify(token);
+    fun getUser(@PathVariable id: Long): ResponseEntity<Any> {
         val user = userRepository.findById(id);
         return ResponseEntity.ok().body(user);
     }
     @PostMapping("/users")
-    fun add(
-        @RequestHeader(name = "authorization") auth: String,
-        @RequestBody(required = true) requestBody: UserCreateBody
-    ): ResponseEntity<User> {
-        val token = auth.replace("Bearer ", "")
-        jwtService.verify(token)
+    fun add(@RequestBody(required = true) requestBody: UserCreateBody): ResponseEntity<User> {
         val password = "password";
         val user = userRepository.save(User(
             requestBody.email,
