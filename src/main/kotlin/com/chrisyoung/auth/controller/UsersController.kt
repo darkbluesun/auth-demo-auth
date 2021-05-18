@@ -1,10 +1,10 @@
-package com.chrisyoung.auth
+package com.chrisyoung.auth.controller
 
+import com.chrisyoung.auth.User
+import com.chrisyoung.auth.UserRepository
 import org.springframework.http.HttpStatus
-import org.springframework.http.RequestEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.net.URI
 
 data class UserCreateBody(
     val email: String,
@@ -29,13 +29,15 @@ class UsersController(val userRepository: UserRepository) {
     @PostMapping("/users")
     fun add(@RequestBody(required = true) requestBody: UserCreateBody): ResponseEntity<User> {
         val password = "password";
-        val user = userRepository.save(User(
+        val user = userRepository.save(
+            User(
             requestBody.email,
             requestBody.mobile,
             requestBody.firstName,
             requestBody.lastName,
             password
-        ))
+        )
+        )
         return ResponseEntity(user, HttpStatus.CREATED);
     }
 }

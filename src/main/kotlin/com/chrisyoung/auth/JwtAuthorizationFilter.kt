@@ -1,5 +1,6 @@
 package com.chrisyoung.auth
 
+import com.chrisyoung.auth.service.JwtService
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -18,7 +19,11 @@ class JwtAuthorizationFilter(private val jwtService: JwtService) : OncePerReques
     private fun getToken(request: HttpServletRequest): String?
     {
         return request.getHeader("Authorization")?.also {
-            return it.extractToken()
+            return if (it.contains("bearer")) {
+                it.extractToken()
+            } else {
+                null;
+            }
         }
     }
 
