@@ -1,5 +1,7 @@
 package com.chrisyoung.auth
 
+import com.chrisyoung.auth.controller.UserCreateBody
+import com.chrisyoung.auth.service.JwtService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

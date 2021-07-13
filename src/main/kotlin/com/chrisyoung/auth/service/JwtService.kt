@@ -1,5 +1,7 @@
-package com.chrisyoung.auth
+package com.chrisyoung.auth.service
 
+import com.chrisyoung.auth.Client
+import com.chrisyoung.auth.User
 import io.fusionauth.jwt.domain.JWT
 import io.fusionauth.jwt.hmac.HMACSigner
 import io.fusionauth.jwt.hmac.HMACVerifier

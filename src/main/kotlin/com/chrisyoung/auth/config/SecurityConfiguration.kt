@@ -1,31 +1,39 @@
-package com.chrisyoung.auth
+package com.chrisyoung.auth.config
 
+import com.chrisyoung.auth.JwtAuthorizationFilter
+import com.chrisyoung.auth.service.JwtService
+import com.chrisyoung.auth.service.UserDetailsService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.security.authentication.AuthenticationProvider
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider
+import org.springframework.core.annotation.Order
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableWebSecurity()
+@Order(-1)
 class SecurityConfiguration(
     val userDetailsService: UserDetailsService,
     val passwordEncoder: BCryptPasswordEncoder
 ): WebSecurityConfigurerAdapter() {
+
     override fun configure(auth: AuthenticationManagerBuilder?) {
         auth?.userDetailsService(userDetailsService)?.passwordEncoder(passwordEncoder)
     }
 
     override fun configure(http: HttpSecurity?) {
-        http?.csrf()?.disable()
+        http?.cors()?.and()?.csrf()?.disable()
             ?.authorizeRequests()
-            ?.antMatchers("/token")?.permitAll()
+            ?.antMatchers("/oauth/token")?.permitAll()
             ?.antMatchers("/authorize")?.authenticated()
             ?.and()
             ?.formLogin()
@@ -33,7 +41,14 @@ class SecurityConfiguration(
             ?.addFilterBefore(JwtAuthorizationFilter(JwtService()), BasicAuthenticationFilter::class.java)
     }
 
-    public override fun userDetailsService(): org.springframework.security.core.userdetails.UserDetailsService {
-        return UserDetailsService(null);
+    @Bean
+    open fun corsConfigurationSource(): CorsConfigurationSource? {
+        val configuration = CorsConfiguration()
+        configuration.addAllowedOrigin("http://localhost:3000")
+        configuration.addAllowedMethod("POST")
+        configuration.addAllowedHeader("*")
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration)
+        return source
     }
 }
